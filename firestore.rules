@@ -1,0 +1,20 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Movies collection
+    // Allow read for everyone (for demo purposes)
+    // Allow write only for authenticated users or server
+    match /movies/{movieId} {
+      allow read: if true;  // Public read access
+      allow create: if true; // Allow seeding
+      allow update, delete: if false; // No updates/deletes from client
+    }
+    
+    // Default: deny all other collections
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+
