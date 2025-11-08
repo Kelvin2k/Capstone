@@ -12,12 +12,19 @@ const MOVIES_COLLECTION = "movies";
  */
 export const getAllMovies = async () => {
   try {
+    console.log("DB instance", db);
+
     const moviesCollection = collection(db, MOVIES_COLLECTION);
     const movieSnapshot = await getDocs(moviesCollection);
-    const movieList = movieSnapshot.docs.map(doc => ({
+    console.log("movieSnapshot", movieSnapshot);
+
+    const movieList = movieSnapshot.docs.map((doc) => ({
       id: doc.id,
-      ...doc.data()
+      ...doc.data(),
     }));
+    console.log("check");
+    console.log(movieList);
+
     return movieList;
   } catch (error) {
     console.error("Error fetching movies:", error);

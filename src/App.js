@@ -1,11 +1,16 @@
-import React from 'react';
-import MovieList from './components/MovieList/MovieList';
+import React from "react";
+import MovieList from "./components/MovieList/MovieList";
+// react-router-dom
+import { Route, Routes } from "react-router-dom";
+import UserTemplate from "./templates/UserTemplate/UserTemplate";
 
 function App() {
   return (
-    <div className="App">
-      <MovieList />
-    </div>
+    <>
+      <Routes>
+        <Route element={<UserTemplate />} path="/"></Route>
+      </Routes>
+    </>
   );
 }
 

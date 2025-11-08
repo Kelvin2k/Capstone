@@ -1,25 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import './MovieList.css';
+import React, { useState, useEffect } from "react";
+import "./MovieList.css";
 
 const MovieList = () => {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [source, setSource] = useState('firestore'); // 'firestore' or 'cloudFunction'
+  const [source, setSource] = useState("firestore"); // 'firestore' or 'cloudFunction'
 
   // Method 1: Fetch from Firestore directly (Client SDK)
   const fetchFromFirestore = async () => {
     try {
       setLoading(true);
       setError(null);
-      
-      const { getAllMovies } = await import('../../services/firebaseService');
+
+      const { getAllMovies } = await import("../../services/firebaseService");
       const movieList = await getAllMovies();
-      
+
       setMovies(movieList);
       setLoading(false);
     } catch (err) {
-      console.error('Error fetching from Firestore:', err);
+      console.error("Error fetching from Firestore:", err);
       setError(err.message);
       setLoading(false);
     }
@@ -30,30 +30,30 @@ const MovieList = () => {
     try {
       setLoading(true);
       setError(null);
-      
+
       // Using Asia East 1 (Taiwan) Cloud Function
       const response = await fetch(
-        'https://asia-east1-project-movie-40343.cloudfunctions.net/getMovies'
+        "https://asia-east1-project-movie-40343.cloudfunctions.net/getMovies"
       );
-      
+
       const data = await response.json();
-      
+
       if (data.success) {
         setMovies(data.content);
       } else {
         throw new Error(data.message);
       }
-      
+
       setLoading(false);
     } catch (err) {
-      console.error('Error fetching from Cloud Function:', err);
+      console.error("Error fetching from Cloud Function:", err);
       setError(err.message);
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (source === 'firestore') {
+    if (source === "firestore") {
       fetchFromFirestore();
     } else {
       fetchFromCloudFunction();
@@ -88,19 +88,24 @@ const MovieList = () => {
       <header className="header">
         <h1>🎬 Movie Database</h1>
         <p className="subtitle">
-          Fetching from: <strong>{source === 'firestore' ? 'Firestore (Client SDK)' : 'Cloud Function (Backend API)'}</strong>
+          Fetching from:{" "}
+          <strong>
+            {source === "firestore"
+              ? "Firestore (Client SDK)"
+              : "Cloud Function (Backend API)"}
+          </strong>
         </p>
-        
+
         <div className="source-toggle">
-          <button 
-            className={source === 'firestore' ? 'active' : ''}
-            onClick={() => switchSource('firestore')}
+          <button
+            className={source === "firestore" ? "active" : ""}
+            onClick={() => switchSource("firestore")}
           >
             📦 Firestore Direct
           </button>
-          <button 
-            className={source === 'cloudFunction' ? 'active' : ''}
-            onClick={() => switchSource('cloudFunction')}
+          <button
+            className={source === "cloudFunction" ? "active" : ""}
+            onClick={() => switchSource("cloudFunction")}
           >
             ☁️ Cloud Function API
           </button>
@@ -120,7 +125,9 @@ const MovieList = () => {
             </div>
             <div className="movie-info">
               <h3>{movie.title}</h3>
-              <p className="year-genre">{movie.year} • {movie.genre}</p>
+              <p className="year-genre">
+                {movie.year} • {movie.genre}
+              </p>
               <p className="director">Directed by {movie.director}</p>
               <p className="description">{movie.description}</p>
             </div>
