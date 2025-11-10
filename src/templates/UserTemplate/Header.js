@@ -62,9 +62,12 @@ const Header = () => {
           </div>
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <a href="#" className="text-sm/6 font-semibold text-gray-900">
+          <NavLink
+            to={"/login"}
+            className="text-sm/6 font-semibold text-gray-900"
+          >
             Log in <span aria-hidden="true">→</span>
-          </a>
+          </NavLink>
         </div>
       </nav>
       <el-dialog>
