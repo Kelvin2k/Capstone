@@ -41,6 +41,11 @@ const Login = () => {
           console.log(values);
           const result = await userServ().loginServ(values);
           console.log("Login successfully", result);
+          messageApi.open({
+            type: "success",
+            content: "Login success",
+          });
+          // save user information
         } catch (error) {
           //error can not login
           console.error("Login failed:", error);
