@@ -1,7 +1,11 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Header = () => {
+  const { user } = useSelector((state) => state.userSlice);
+  console.log(user);
+
   return (
     <header className="bg-white">
       <nav
@@ -62,12 +66,17 @@ const Header = () => {
           </div>
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <NavLink
-            to={"/login"}
-            className="text-sm/6 font-semibold text-gray-900"
-          >
-            Log in <span aria-hidden="true">→</span>
-          </NavLink>
+          {/* if user hasn't login will display login , if already loged in will display username  */}
+          {user ? (
+            <p>{user.email}</p>
+          ) : (
+            <NavLink
+              to={"/login"}
+              className="text-sm/6 font-semibold text-gray-900"
+            >
+              Log in <span aria-hidden="true">→</span>
+            </NavLink>
+          )}
         </div>
       </nav>
       <el-dialog>

@@ -1,5 +1,5 @@
 import React from "react";
-import Lottie from "lottie-react"; // Changed from "react-lottie"
+import Lottie from "react-lottie"; // Changed from "react-lottie"
 import * as LoginAnimation from "./../../assets/animation/loginAnimation.json";
 import { useFormik } from "formik";
 import { getAuth } from "firebase/auth";
@@ -8,12 +8,18 @@ import * as Yup from "yup";
 import userServ from "../../services/userServ";
 import { message } from "antd";
 import { useState } from "react";
+import { saveLocalStorage } from "../../utils/local";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { saveInfoUser } from "../../redux/slice/userSlice";
 
 const auth = getAuth();
 
 const Login = () => {
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
+  const navigate = useNavigate();
   const { handleSubmit, handleChange, handleBlur, values, errors, touched } =
     useFormik({
       initialValues: {
@@ -26,6 +32,17 @@ const Login = () => {
       //     .loginServ(values)
       //     .then((res) => {
       //       console.log(res);
+      //       messageApi.open({
+      //   type: "success",
+      //   content: "Login success",
+      // save user information
+      // saveLocalStorage(res.data.content, 'user_info')
+      // dispatch(saveInfoUser(res.data.content, "user_info"))
+      // setTimeout(() => {
+      // navigate('/')
+
+      // }, 1000);
+      // });
       //     })
       //     .catch((err) => {
       //       console.log(err);
@@ -46,6 +63,11 @@ const Login = () => {
             content: "Login success",
           });
           // save user information
+          saveLocalStorage(values, "user_info");
+          setTimeout(() => {
+            navigate("/");
+          }, 1000);
+          dispatch(saveInfoUser(values));
         } catch (error) {
           //error can not login
           console.error("Login failed:", error);
@@ -64,6 +86,15 @@ const Login = () => {
   const setTogglePassword = () => {
     setShowPassword(!showPassword);
   };
+
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: LoginAnimation, // Must be defined
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  };
   return (
     <>
       {contextHolder}
@@ -71,16 +102,7 @@ const Login = () => {
         <div className="container">
           <div className="grid grid-cols-2">
             <div className="col_left">
-              <Lottie
-                animationData={LoginAnimation}
-                loop={true}
-                autoplay={true}
-                style={{
-                  height: 400,
-                  width: 400,
-                  preserveAspectRatio: "xMidYMid slice",
-                }}
-              />
+              <Lottie options={defaultOptions} height={400} width={400} />
             </div>
             <div className="col-right">
               <form onSubmit={handleSubmit} className="space-y-5">
@@ -138,9 +160,9 @@ const Login = () => {
                       className="absolute inset-y-0 right-0 pr-3 hover:opacity-70 duration-300"
                     >
                       {showPassword ? (
-                        <i class="fa-solid fa-eye"></i>
+                        <i className="fa-solid fa-eye"></i>
                       ) : (
-                        <i class="fa-solid fa-eye-slash"></i>
+                        <i className="fa-solid fa-eye-slash"></i>
                       )}
                     </button>
                   </div>
